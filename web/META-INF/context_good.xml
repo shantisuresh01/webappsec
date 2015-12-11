@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/musicStoreOTUser">
+    <Resource auth="Container"
+    driverClassName="com.mysql.jdbc.Driver"
+    logAbandoned="true"
+    maxActive="100" 
+    maxIdle="30"
+    maxWait="10000"
+    name="jdbc/musicDB"
+    password="pd-4H__EyW2v"
+    removeAbandoned="true"
+    removeAbandonedTimeout="60"
+    type="javax.sql.DataSource" 
+    url="jdbc:mysql://localhost:3306/webappsec"
+    username="adminE8P5YDz"/>
+    <Realm className="org.apache.catalina.realm.JDBCRealm"
+    connectionName="adminE8P5YDz"
+    connectionPassword="pd-4H__EyW2v"
+    connectionURL="jdbc:mysql://localhost:3306/webappsec"
+    dataSourceName="jdbc/musicDB"
+    debug="99"
+    driverName="com.mysql.jdbc.Driver"
+    roleNameCol="Rolename"
+    userCredCol="Password"
+    userNameCol="EmailAddress"
+    userRoleTable="v_UserRole"
+    userTable="v_UserPass"/>
+</Context>
