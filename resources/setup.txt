@@ -1,0 +1,14 @@
+(1) Modify contetx.xml:
+- change IP address 
+
+(2) Add the admin user in MySQL for the new IP address:
+- CREATE USER 'adminE8P5YDz'@'localhost' identified by '---------'
+- GRANT ALL PRIVILEGES ON * . * TO 'adminE8P5YDz'@'localhost' identified by '---------'
+
+(3) Change Tomcat's setenv.sh as follows:
+export OPENSHIFT_MYSQL_DB_USERNAME="adminE8P5YDz"
+export OPENSHIFT_MYSQL_DB_HOST="10.51.177.158"
+#export OPENSHIFT_MYSQL_DB_HOST="10.0.0.6"
+#export OPENSHIFT_MYSQL_DB_HOST="localhost"
+export OPENSHIFT_MYSQL_DB_PORT=3306
+export OPENSHIFT_MYSQL_DB_PASSWORD="----------"

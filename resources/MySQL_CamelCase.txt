@@ -1,0 +1,153 @@
+USE webappsec;
+
+CREATE table `v_User` (
+`UserID` DOUBLE NOT NULL AUTO_INCREMENT,
+`FirstName` VARCHAR(50),
+`LastName` VARCHAR(50),
+`EmailAddress` VARCHAR(50),
+`CompanyName` VARCHAR(50),
+`Address1` VARCHAR(50),
+`Address2` VARCHAR(50),
+`City` VARCHAR(50),
+`State` VARCHAR(50),
+`Zip` VARCHAR(50),
+`Country` VARCHAR(50),
+`CreditCardType` VARCHAR(50),
+`CreditCardNumber` DOUBLE,
+`CreditCardExpirationDate` VARCHAR(50),
+constraint `v_User_PK` primary key (`UserID`)
+);
+ 
+
+CREATE table `v_UserPass` (
+`EmailAddress` VARCHAR(50) NOT NULL,
+`Password` VARCHAR(15) NOT NULL,
+`Answer` VARCHAR(50) DEFAULT '',
+constraint `v_UserPass_PK` primary key (`EmailAddress`)
+);
+
+CREATE table `v_UserRole` (
+`EmailAddress` VARCHAR(50) NOT NULL,
+`RoleName` VARCHAR(20) NOT NULL
+);
+
+alter table `v_UserRole` add constraint `v_UserRole_PK` primary key
+(`EmailAddress`,`RoleName`);
+
+CREATE table `v_Product` (
+`ProductID` DOUBLE NOT NULL AUTO_INCREMENT,
+`ProductCode` VARCHAR(30) NOT NULL,
+`ProductDescription` VARCHAR(240) DEFAULT '' NOT NULL,
+`ProductPrice` DECIMAL(8,2) DEFAULT 0 NOT NULL,
+constraint `v_Product_PK` primary key (`ProductID`)
+);
+
+CREATE table `v_UserCart` (
+`UserCartID` DOUBLE AUTO_INCREMENT,
+`UserID` DOUBLE,
+constraint `v_UserCart_PK` primary key (`UserCartID`)
+);
+
+ALTER TABLE `v_UserCart` ADD CONSTRAINT `v_UserCart_FK`
+FOREIGN KEY (`UserID`)
+REFERENCES `v_User` (`UserID`)
+ON DELETE CASCADE;
+
+CREATE TABLE `v_CartLineItem`
+( `CartLineItemID` DOUBLE NOT NULL AUTO_INCREMENT,
+`UserCartID` DOUBLE NOT NULL,
+`ProductID` DOUBLE NOT NULL,
+`Quantity` DOUBLE NOT NULL,
+CONSTRAINT `v_CartLineItem_PK` PRIMARY KEY
+(`CartLineItemId`) 
+);
+
+
+ALTER TABLE `v_CartLineItem` ADD CONSTRAINT
+`v_CartLineItem_PK` FOREIGN KEY (`UserCartID`)
+REFERENCES `v_UserCart` (`UserCartID`) ON DELETE CASCADE;
+
+
+
+CREATE table `v_Invoice` (
+`InvoiceID` DOUBLE NOT NULL AUTO_INCREMENT,
+`UserID` DOUBLE NOT NULL,
+`InvoiceDate` DATETIME NOT NULL,
+`TotalAmount` DECIMAL(8,2) ,
+`IsProcessed` VARCHAR(20),
+constraint `v_Invoice_PK` primary key (`InvoiceID`)
+);
+
+
+ALTER TABLE `v_Invoice` ADD CONSTRAINT `v_Invoice_FK`
+FOREIGN KEY (`UserID`)
+REFERENCES `v_User` (`UserID`)
+ON DELETE CASCADE;
+
+CREATE TABLE `v_Reviews`
+( `ReviewID` DOUBLE NOT NULL AUTO_INCREMENT,
+`Title` VARCHAR(240) DEFAULT ' ',
+`Message` VARCHAR(240) DEFAULT ' ',
+`ReviewDate` DATETIME,
+`UserID` DOUBLE,
+`ProductID` DOUBLE NOT NULL,
+CONSTRAINT `v_Reviews_PK` PRIMARY KEY (`ReviewID`) 
+);
+
+
+ALTER TABLE `v_Reviews` ADD CONSTRAINT `v_Reviews_FK` FOREIGN
+KEY (`ProductID`)
+REFERENCES `v_Product` (`ProductID`) ON DELETE CASCADE;
+
+
+CREATE TABLE `v_LineItem`
+( `LineItemID` DOUBLE NOT NULL AUTO_INCREMENT,
+`InvoiceID` DOUBLE NOT NULL,
+`ProductID` DOUBLE NOT NULL,
+`Quantity` DOUBLE,
+CONSTRAINT `v_LineItem_PK` PRIMARY KEY (`LineItemID`)
+);
+
+ALTER TABLE `v_LineItem` ADD CONSTRAINT `v_LineItem_PK` FOREIGN
+KEY (`InvoiceID`)
+REFERENCES `v_Invoice` (`InvoiceID`) ON DELETE CASCADE;
+
+DELETE from v_Invoice;
+DELETE from v_Reviews;
+DELETE from v_UserCart;
+DELETE from v_Product;
+INSERT INTO v_Product VALUES
+(1,'8601', 'Michael Jackson - The Thriller','15.15');
+INSERT INTO v_Product VALUES
+(2,'pf01', 'Michael Jackson - Dangerous','10.10');
+INSERT INTO v_Product VALUES
+(3, 'pf02', 'Apple - iPad','200.20');
+INSERT INTO v_Product VALUES
+(4,'jr01',' Stevie Wonder - Songs in the Key of Life','5.05');
+
+DELETE from v_User;
+INSERT INTO v_User VALUES
+(4,'fTest','lTest','test@test.com','','25800 Carlos Bee
+Boulevard','','Hayward','CA','94542','USA','Visa',411111111111111,'05/2012');
+
+INSERT INTO v_User VALUES
+(5,'fTest1','lTest1','test1@test.com','','25800 Carlos Bee
+Boulevard','','Hayward','CA','94542','USA','Visa',4222222222222,'01/2011');
+
+DELETE from v_UserRole;
+
+INSERT INTO v_UserRole VALUES
+('admin','admin');
+INSERT INTO v_UserRole VALUES
+('test1@test.com','user');
+INSERT INTO v_UserRole VALUES
+('test@test.com','user');
+
+DELETE from v_UserPass;
+INSERT INTO v_UserPass VALUES
+('admin','admin' ,NULL);
+INSERT INTO v_UserPass VALUES
+('test1@test.com','test1','white');
+INSERT INTO v_UserPass VALUES
+('test@test.com','falsepass','black');
+
